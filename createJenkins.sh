@@ -15,7 +15,7 @@ echo "Create Jenkins volume."
 # Start Jenkins.
 docker run \
 --name ${JENKINS_NAME} \
---link ${GERRIT_NAME}:gerrit \
+-p 8080:8080 \
 -p 50000:50000 \
 --volumes-from ${JENKINS_VOLUME} \
 -d ${JENKINS_IMAGE_NAME} ${JENKINS_OPTS}
