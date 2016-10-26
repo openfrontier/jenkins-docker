@@ -23,8 +23,7 @@ docker run \
 --net ${CI_NETWORK} \
 -p 50000:50000 \
 --volumes-from ${JENKINS_VOLUME} \
--v ~/jenkins-docker/jenkins.sh:/usr/local/bin/jenkins.sh \
--e JAVA_OPTS="-Duser.timezone=${TIMEZONE}" \
+-e JAVA_OPTS="-Duser.timezone=${TIMEZONE} -Djenkins.install.runSetupWizard=false" \
 -e LDAP_SERVER=${LDAP_SERVER} \
 -e LDAP_ROOTDN=${LDAP_ACCOUNTBASE} \
 -e LDAP_INHIBIT_INFER_ROOTDN=false \
