@@ -16,9 +16,6 @@ NEXUS_REPO=${NEXUS_REPO:-$6}
 ##TODO: This is not an elegant way.
 [ -f ~/.ssh/known_hosts ] && mv ~/.ssh/known_hosts ~/.ssh/known_hosts.bak
 ssh-keyscan -p 29418 -t rsa ${GERRIT_SSH_HOST} > ~/.ssh/known_hosts
-#create jenkins account in gerrit.
-##TODO: check account existence before create one.
-docker exec ${JENKINS_NAME} cat /var/jenkins_home/.ssh/id_rsa.pub | ssh -i "${SSH_KEY_PATH}" -p 29418 ${GERRIT_ADMIN_UID}@${GERRIT_SSH_HOST} gerrit create-account --group "'Non-Interactive Users'" --full-name "'Jenkins Server'" --ssh-key - jenkins
 
 #checkout project.config from All-Project.git
 [ -d ${CHECKOUT_DIR} ] && mv ${CHECKOUT_DIR}  ${CHECKOUT_DIR}.$$
@@ -68,14 +65,3 @@ kill ${SSH_AGENT_PID}
 cd -
 rm -rf ${CHECKOUT_DIR}
 [ -d ${CHECKOUT_DIR}.$$ ] && mv ${CHECKOUT_DIR}.$$  ${CHECKOUT_DIR}
-
-#Setup gerrit-trigger plugin and restart jenkins
-docker exec ${JENKINS_NAME} \
-jenkins-setup.sh \
-${GERRIT_NAME} \
-${GERRIT_WEBURL} \
-${JENKINS_WEBURL} \
-${NEXUS_REPO}
-
-docker restart ${JENKINS_NAME}
-
